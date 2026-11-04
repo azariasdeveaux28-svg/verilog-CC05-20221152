@@ -34,8 +34,15 @@ module top_module #(parameter integer K = 3)(
             cnt_q <= 4'd0;
             spk_q <= 1'b0;
         end else if (en) begin
-            key_q <= key_sel;
-            // TODO commit 4: deteccion de cambio y contador del speaker
+            if (key_sel != key_q) begin
+                // Cambio de tecla: se registra la nueva, se reinicia el
+                // contador y el speaker; este flanco no cuenta para el tono
+                key_q <= key_sel;
+                cnt_q <= 4'd0;
+                spk_q <= 1'b0;
+            end
+            // TODO commit 5: contador de flancos con la tecla estable
+            // TODO commit 6: alternar el speaker al completar el periodo
         end
         // con en=0 no se asigna nada: el estado se congela
     end
