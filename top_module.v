@@ -45,13 +45,14 @@ module top_module #(parameter integer K = 3)(
                 cnt_q <= 4'd0;
                 spk_q <= 1'b0;
             end else if (key_q != 3'd0) begin
-                // Tecla estable y distinta de 0: el contador avanza y da la
-                // vuelta al completar el periodo
-                if (cnt_q == cnt_last)
+                // Tecla estable y distinta de 0: al completar el periodo el
+                // contador da la vuelta y el speaker alterna
+                if (cnt_q == cnt_last) begin
                     cnt_q <= 4'd0;
-                else
+                    spk_q <= ~spk_q;
+                end else begin
                     cnt_q <= cnt_q + 4'd1;
-                // TODO commit 6: alternar el speaker al dar la vuelta
+                end
             end
         end
         // con en=0 no se asigna nada: el estado se congela
