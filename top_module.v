@@ -17,6 +17,10 @@ module top_module #(parameter integer K = 3)(
     // Combinacional
     reg [2:0] key_sel;
 
+    // Ultimo valor del contador en una vuelta: el periodo es K + activa - 1
+    // flancos, asi que el contador va de 0 a K + activa - 2
+    wire [4:0] cnt_last = K + key_q - 2;
+
     // Codificador de prioridad: bit0 > bit1 > bit2 > bit3
     // key_sel: 0 = ninguna tecla, 1..4 = tecla prioritaria
     always @* begin
@@ -40,9 +44,15 @@ module top_module #(parameter integer K = 3)(
                 key_q <= key_sel;
                 cnt_q <= 4'd0;
                 spk_q <= 1'b0;
+            end else if (key_q != 3'd0) begin
+                // Tecla estable y distinta de 0: el contador avanza y da la
+                // vuelta al completar el periodo
+                if (cnt_q == cnt_last)
+                    cnt_q <= 4'd0;
+                else
+                    cnt_q <= cnt_q + 4'd1;
+                // TODO commit 6: alternar el speaker al dar la vuelta
             end
-            // TODO commit 5: contador de flancos con la tecla estable
-            // TODO commit 6: alternar el speaker al completar el periodo
         end
         // con en=0 no se asigna nada: el estado se congela
     end
