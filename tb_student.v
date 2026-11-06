@@ -189,6 +189,71 @@ module tb_student;
         end
     endtask
 
+    // Modelo de referencia ciclo a ciclo, escrito a partir del enunciado
+    reg [2:0] m_key;
+    integer   m_cnt;
+    reg       m_spk;
+
+    // Un ciclo: aplica entradas, actualiza el modelo, da un flanco y compara
+    task step;
+        input       r;
+        input       e;
+        input [7:0] c;
+        reg [2:0]   sel;
+        begin
+            rst = r;
+            en  = e;
+            cmd = c;
+            if (r) begin
+                m_key = 3'd0;
+                m_cnt = 0;
+                m_spk = 1'b0;
+            end else if (e) begin
+                sel = exp_key(c[3:0]);
+                if (sel != m_key) begin
+                    m_key = sel;
+                    m_cnt = 0;
+                    m_spk = 1'b0;
+                end else if (m_key != 3'd0) begin
+                    if (m_cnt == TB_K + m_key - 2) begin
+                        m_cnt = 0;
+                        m_spk = ~m_spk;
+                    end else begin
+                        m_cnt = m_cnt + 1;
+                    end
+                end
+            end
+            tick;
+            check(m_key, m_spk, "aleatoria");
+        end
+    endtask
+
+    // 900 ciclos con reset, enable y cmd pseudoaleatorios (semilla fija).
+    // cmd cambia solo de vez en cuando para que los contadores avancen.
+    task random_test;
+        integer i;
+        integer seed;
+        reg [7:0] c;
+        reg       r;
+        reg       e;
+        begin
+            seed = 32'h1234;
+            c = 8'h00;
+            do_reset;
+            m_key = 3'd0;
+            m_cnt = 0;
+            m_spk = 1'b0;
+            for (i = 0; i < 900; i = i + 1) begin
+                if (($random(seed) & 7) == 0) c = $random(seed);
+                r = (($random(seed) & 31) == 0);
+                e = (($random(seed) & 3) != 0);
+                step(r, e, c);
+            end
+            rst = 1'b0;
+            en  = 1'b1;
+        end
+    endtask
+
     initial begin
         $dumpfile("wave.vcd");
         $dumpvars(0, tb_student);
@@ -237,6 +302,9 @@ module tb_student;
         test_priority;
         test_change_limit;
         test_pause;
+
+        // Prueba pseudoaleatoria contra el modelo de referencia
+        random_test;
 
         $display("Resumen: %0d comparaciones, %0d errores", checks, errors);
         if (errors == 0) $display("RESULTADO: OK");
