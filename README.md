@@ -69,3 +69,22 @@ El testbench imprime `RESULTADO: OK` si no hay errores. También genera
 - Pausa con `en=0`, reset con prioridad sobre `en` y cambios de `cmd` en pausa.
 - 900 ciclos pseudoaleatorios contra un modelo de referencia, verificados con
   K=3, 5 y 8.
+
+## Historial de commits
+
+| # | Hash | Fecha y hora | Qué hizo |
+|---|------|--------------|----------|
+| 1 | 8100cc4 | 03/11 11:59 | Interfaz de `top_module` con parámetro K, registros de estado y plan |
+| 2 | 133d19f | 04/11 17:34 | Codificador de prioridad sobre `cmd[3:0]` |
+| 3 | 85a35a5 | 04/11 18:01 | Registro de estado con reset síncrono y `key_q` con enable |
+| 4 | 5249ce5 | 04/11 18:30 | Detección de cambio de tecla: reinicia contador y speaker |
+| 5 | 543528b | 04/11 18:53 | Contador de flancos con tecla estable |
+| 6 | 9a33c9b | 04/11 19:13 | El speaker alterna al completar el periodo `K + activa - 1` |
+| 7 | 4faaba3 | 05/11 21:03 | Esqueleto del testbench: reloj, reset, comparador y contadores |
+| 8 | be7e5ec | 05/11 21:07 | Pruebas nominales, bits altos de `cmd` y reset con tecla activa |
+| 9 | 8c4d028 | 06/11 07:40 | Prioridad con las 16 máscaras, cambio en el límite y pausa |
+| 10 | 66a1fa3 | 06/11 07:59 | Prueba pseudoaleatoria de 900 ciclos, verificada con K=3, 5 y 8 |
+| 11 | 08b52b7 | 06/11 08:28 | README con arquitectura, reglas, caso límite y cómo correr las pruebas |
+| 12 | este commit | 06/11 | Tabla del historial de commits |
+
+El hash completo del último commit se obtiene con `git rev-parse HEAD`.
