@@ -85,6 +85,15 @@ El testbench imprime `RESULTADO: OK` si no hay errores. También genera
 | 9 | 8c4d028 | 06/11 07:40 | Prioridad con las 16 máscaras, cambio en el límite y pausa |
 | 10 | 66a1fa3 | 06/11 07:59 | Prueba pseudoaleatoria de 900 ciclos, verificada con K=3, 5 y 8 |
 | 11 | 08b52b7 | 06/11 08:28 | README con arquitectura, reglas, caso límite y cómo correr las pruebas |
-| 12 | este commit | 06/11 | Tabla del historial de commits |
+| 12 | fc1293a | 06/11 | Tabla del historial de commits |
+| 13 | este commit | 06/11 | Resultados de las pruebas en el README |
 
 El hash completo del último commit se obtiene con `git rev-parse HEAD`.
+
+## Resultados
+
+Simulación con Icarus Verilog 12.0, desde la raíz del repositorio. Valores de K probados: 3, 5 y 8.
+
+- K=3: Resumen: 954 comparaciones, 0 errores RESULTADO: OK 
+- K=5: Resumen: 954 comparaciones, 0 errores RESULTADO: OK 
+- K=8: Resumen: 954 comparaciones, 0 errores RESULTADO: OK 
